@@ -12,6 +12,26 @@ import StartQuiz from '../components/start-quiz/StartQuiz.js'
 export default function Home() {
 
   const [questions, setQuestions] = useState([]);
+  const [over, setOver] = useState(false);
+  const [answeredQuestions, setAnsweredQuestions] = useState(0);
+  const [totalXp, setTotalXp] = useState(0);
+
+  const countDownOver = (value) => {
+    setOver(value);
+  }
+
+  const setXp = (current) => {
+    setTotalXp((totalXp) => totalXp + current)
+  }
+
+  const setAnswered = () => {
+    setAnsweredQuestions((answeredQuestions) => answeredQuestions + 1)
+  }
+
+  console.log('over', over);
+  console.log('questions', questions);
+
+
 
   useEffect(async () => {
     let dataQuestions = await fetch(process.env.apiUrl + "/questions").then(
@@ -20,15 +40,6 @@ export default function Home() {
 
     setQuestions(dataQuestions);
   }, []);
-
-
-
-  // const answerHandler = (isCorrect) => {
-  //   setShowQuestion(false);
-  //   if (isCorrect) {
-  //     setNextQuestion()
-  //     setXp(xp + 1);
-  //   }
 
   return (
     <React.Fragment>
@@ -41,16 +52,31 @@ export default function Home() {
       <Container
         maxWidth="100%"
         height={'30%'}
-        sx={{ backgroundColor: "blue" }}>
+        sx={{ backgroundColor: "blue", }}>
         <Grid container
-          justifyContent="center">
+          justifyContent="center"
+        >
           <Grid item
             xs={12}
-            md={4}>
+            md={6}
+            sx={{ maxWidth: '1320px' }}>
+
             {/* {timeleft ?  <Success correctAnswers={5} /> : }*/}
-            <Quiz questions={questions} />
-            </Grid>
-            {/* <StartQuiz/> */}
+            {(over === true || answeredQuestions === 4)
+              ? <Success
+                questions={questions}
+                answeredQuestions={answeredQuestions} />
+              : <Quiz
+                totalXp={totalXp}
+                setAnswered={setAnswered}
+                setXp={setXp}
+                countDownOver={countDownOver}
+                over={over}
+                questions={questions}
+                answeredQuestions={answeredQuestions} />
+            }
+          </Grid>
+          {/* <StartQuiz/> */}
         </Grid>
       </Container>
     </React.Fragment>

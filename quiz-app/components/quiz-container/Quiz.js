@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountDown from './Countdown.js';
 
-import { Grid, Container, IconButton, InputBase, Button, TextField, Checkbox } from "@mui/material";
+import { Grid, InputAdornment, Input, Container, IconButton, InputBase, Button, TextField, Checkbox } from "@mui/material";
 import styles from "./Quiz.module.scss"
 import * as React from 'react';
 import Accordion from '@mui/material/Accordion';
@@ -10,18 +10,45 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { styled } from '@mui/material/styles';
 
 export default function Quiz({
   questions,
-  questionsCount = "1",
-  xpCount = "210",
+  totalXp,
+  setAnswered,
+  setXp,
+  over,
+  countDownOver,
+  answeredQuestions
 }) {
-  const [expanded, setExpanded] = React.useState('panel');
+  const [expanded, setExpanded] = useState('panel');
+  const [answerInput, setAnswerInput] = useState('');
 
+  console.log(answerInput);
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
+
+  const StyledTextField = styled(TextField)(() => ({
+    '& fieldset': {
+      borderRadius: '25px',
+      border: '1px solid'
+    },
+  }));
+
+
+  function checkAnswer(data) {
+
+    if (answerInput !== data.correctAnswer) {
+      setAnswered();
+      console.log('Incorrect!!!');
+    } if (answerInput === data.correctAnswer) {
+      setAnswered();
+      setXp(data.xp);
+      console.log('Correct!!!');
+    }
+  }
 
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
@@ -30,33 +57,36 @@ export default function Quiz({
     <div className={styles.containerWrapper}>
       <Grid container
         className={styles.props}
-        maxWidth={'100%'}
+        maxWidth='100%'
         display={'flex'}
-        justifyContent={'center'}>
+        justifyContent={'center'}
+        sx={{ pb: 5, mb: 5 }}>
         <Grid container
           pt={'15%'}
           pb={'15%'}
-          display={'flex'}>
+          display={'flex'}
+          sx={{ textAlign: 'center' }}>
           <Grid item
             xs={4}>
-            {questionsCount}/5
+            {`${answeredQuestions}/${questions.length}`}
             <p className={styles.title}>QUESTIONS</p></Grid>
           <Grid item xs={4}>
-          <CountDown />
+            <CountDown over={over} countDownOver={countDownOver} />
             <p className={styles.title}>
-            
+
               TIME REMAINING
             </p>
           </Grid>
           <Grid item
             xs={4}>
-            {xpCount}
+            {totalXp}
             <p className={styles.title}>
               TOTAL XP</p></Grid>
         </Grid>
 
         <Grid container
           gap={'7px'}>
+
           {questions.map((question, idx) => {
 
             return <Grid item
@@ -65,42 +95,75 @@ export default function Quiz({
               <Accordion
                 expanded={expanded === `panel${idx}`}
                 onChange={handleChange(`panel${idx}`)}
+                sx={{ px: 5, py: 1 }}
                 style={{
                   width: '100%',
-                  borderRadius: '20px',
-                  padding: '0px 0px 0px 20px',
+                  borderRadius: '30px',
                   backgroundColor: '#FAFBFD'
                 }}>
-                <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-
+                <AccordionSummary
+                  aria-controls="panel1d-content"
+                  id="panel1d-header"
+                  sx={{ alignItems: 'center' }}>
                   <Grid item
+                    xs={6}
+                    md={10}
                     sx={{
                       display: "row",
-                      padding: '0px 400px 0px 0px'
                     }}>
-                    <Typography
-                      className={styles.typographyEl}>
-                      Type the missing line</Typography>
-                    <p
-                      className={styles.plusXp}>
-                      +{question.xp}XP</p>
+                    <div>
+                      <Typography
+                        className={styles.typographyEl}>
+                        Type the missing line
+                      </Typography>
+                      <p className={styles.plusXp}>
+                        <span>+{question.xp}XP</span>
+                      </p>
+                    </div>
                   </Grid>
-                  <Checkbox style={{ border: '50%' }}
-                    checkedIcon={<CheckCircleIcon />}
-                    defaultChecked color="success" />
+                  <Grid item
+                    xs={6}
+                    md={2}
+                    sx={{ textAlign: 'end' }}>
+                    <CheckCircleIcon color='success' />
+                  </Grid>
+
+
+
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container >
                     <Grid item xs={12}>
-                      <img src={question.questionUrl} /></Grid>
-                    <Grid item xs={12}></Grid>
+                      <img
+                        style={{ width: '100%' }}
+                        src={question.questionUrl} />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <StyledTextField
+                        sx={{ width: '100%', mt: 5 }}
+                        InputProps={{
+                          endAdornment: <InputAdornment position="end">PRESS ENTER TO SUBMIT</InputAdornment>,
+                        }}
+                        type="input"
+                        onKeyPress={event => {
+                          if (event.key === "Enter") {
+
+                            setAnswerInput(event.target.value)
+                            if (answerInput !== question.correctAnswer) {
+                              setAnswered();
+                              console.log('Incorrect!!!');
+                            } if (answerInput === question.correctAnswer) {
+                              setAnswered();
+                              setXp(question.xp);
+                              console.log('Correct!!!');
+                            }
+                          }
+                        }}
+
+                      />
+                    </Grid>
                   </Grid>
-                  <TextField
-                    type="text"
-                    placeholder="value"
-                    onChange={(e) => answerHandler(e)}
-                  >
-                  </TextField>
+
                 </AccordionDetails>
               </Accordion>
             </Grid>
