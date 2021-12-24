@@ -1,7 +1,10 @@
 import { Grid } from "@mui/material"
 import styles from "./Success.module.scss"
 
-export default function Success({ correctAnswers }) {
+export default function Success({
+    answeredQuestions,
+    questions,
+}) {
     return (
         <div
             className={styles.wrapper}>
@@ -30,7 +33,8 @@ export default function Success({ correctAnswers }) {
                     }}>
                     <span
                         className={styles.numbers}>
-                        {correctAnswers}/5
+                        {`${answeredQuestions}/${questions.length}`}
+       
                     </span>
                     <p
                         style={{
