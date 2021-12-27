@@ -29,10 +29,7 @@ export default function CountDown({ minutes = 10, seconds = 0, over, countDownOv
     return (
         <div>
            {m.toString().padStart(2, '0')}:{s.toString().padStart(2, '0')}
-            {/* <button onClick={() => setPaused(!paused)}>
-                {paused ? 'Resume' : 'Pause'}
-            </button>
-            <button onClick={() => reset()}>Restart</button> */}
+        
         </div>
     );
 }; 
