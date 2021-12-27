@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import CountDown from './Countdown.js';
-
 import { Grid, InputAdornment, Input, Container, IconButton, InputBase, Button, TextField, Checkbox } from "@mui/material";
 import styles from "./Quiz.module.scss"
 import * as React from 'react';
@@ -19,12 +18,11 @@ export default function Quiz({
   setXp,
   over,
   countDownOver,
-  answeredQuestions
+  answeredQuestions,
+
 }) {
   const [expanded, setExpanded] = useState('panel');
   const [answerInput, setAnswerInput] = useState('');
-
-  console.log(answerInput);
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -37,21 +35,8 @@ export default function Quiz({
     },
   }));
 
-
-  function checkAnswer(data) {
-
-    if (answerInput !== data.correctAnswer) {
-      setAnswered();
-      console.log('Incorrect!!!');
-    } if (answerInput === data.correctAnswer) {
-      setAnswered();
-      setXp(data.xp);
-      console.log('Correct!!!');
-    }
-  }
-
-  const time = new Date();
-  time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
+  // const time = new Date();
+  // time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
 
   return (
     <div className={styles.containerWrapper}>
@@ -128,8 +113,6 @@ export default function Quiz({
                     <CheckCircleIcon color='success' />
                   </Grid>
 
-
-
                 </AccordionSummary>
                 <AccordionDetails>
                   <Grid container >
@@ -147,14 +130,12 @@ export default function Quiz({
                         type="input"
                         onKeyPress={event => {
                           if (event.key === "Enter") {
-
                             setAnswerInput(event.target.value)
                             if (answerInput !== question.correctAnswer) {
-                              setAnswered();
-                              console.log('Incorrect!!!');
+                              
                             } if (answerInput === question.correctAnswer) {
                               setAnswered();
-                              setXp(question.xp);
+                              setXp(question.xp);   
                               console.log('Correct!!!');
                             }
                           }
