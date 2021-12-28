@@ -24,10 +24,10 @@ export default function Quiz({
   const [expanded, setExpanded] = useState('panel');
   const [answerInput, setAnswerInput] = useState('');
   
-  const [shake, setShake] = useState(false);
-  setTimeout(() => {
-    setShake(true)
-  }, 5000)
+  // const [shake, setShake] = useState(false);
+  // setTimeout(() => {
+  //   setShake(true)
+  // }, 5000)
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -39,9 +39,6 @@ export default function Quiz({
       border: '1px solid'
     },
   }));
-
-  // const time = new Date();
-  // time.setSeconds(time.getSeconds() + 600); // 10 minutes timer
 
   return (
     <div className={styles.containerWrapper}>
@@ -138,7 +135,7 @@ export default function Quiz({
                           if (event.key === "Enter") {
                             setAnswerInput(event.target.value)
                             if (answerInput !== question.correctAnswer) {
-                              
+                              alert('Incorrect Answer!')
                             } if (answerInput === question.correctAnswer) {
                               setAnswered();
                               setXp(question.xp);   
