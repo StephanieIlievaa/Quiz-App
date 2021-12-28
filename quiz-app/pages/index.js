@@ -5,16 +5,6 @@ import Head from 'next/head';
 import StartQuiz from '../components/start-quiz/StartQuiz.js'
 
 export default function Home() {
-  
-const [questions, setQuestions] = useState([]);
- 
-  useEffect(async () => {
-    let dataQuestions = await fetch(process.env.apiUrl + "/questions").then(
-      (res) => res.json()
-    );
-
-    setQuestions(dataQuestions);
-  }, []);
 
   return (
     <React.Fragment>
@@ -27,7 +17,7 @@ const [questions, setQuestions] = useState([]);
       <Container
         maxWidth="100%"
 
-        sx={{ backgroundColor: "blue", height: '1200px' }}>
+        sx={{ backgroundColor: "blue", height: '100%' }}>
         <Grid container
           justifyContent="center"
         >

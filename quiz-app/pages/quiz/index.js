@@ -50,7 +50,7 @@ setNextQuestion(value);
       <Container
         maxWidth="100%"
         
-        sx={{ backgroundColor: "blue", height: '1200px'}}>
+        sx={{ backgroundColor: "blue", height: '100%'}}>
         <Grid container
           justifyContent="center"
         >

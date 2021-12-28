@@ -23,6 +23,11 @@ export default function Quiz({
 }) {
   const [expanded, setExpanded] = useState('panel');
   const [answerInput, setAnswerInput] = useState('');
+  
+  const [shake, setShake] = useState(false);
+  setTimeout(() => {
+    setShake(true)
+  }, 5000)
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -77,6 +82,7 @@ export default function Quiz({
             return <Grid item
               xs={12}
               style={{ width: '130%' }}>
+                <motion.div>
               <Accordion
                 expanded={expanded === `panel${idx}`}
                 onChange={handleChange(`panel${idx}`)}
@@ -147,6 +153,7 @@ export default function Quiz({
 
                 </AccordionDetails>
               </Accordion>
+              </motion.div>
             </Grid>
           })}
         </Grid>
